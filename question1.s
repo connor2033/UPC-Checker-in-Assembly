@@ -20,7 +20,7 @@ loop1	LDRB r2, [r1], #1		;	Load odd byte of UPC in R2
 loop2	SUBS r8, r8, #10		; 	Subtracting 10 from total sum
 		CMP r8, #10				;	Check if number r8 is 10
 		BEQ valid				;	If total sum is multiple of 10
-		BLT loop				;	If r8 is Less Than 10 (not multiple) end program
+		BLT loop1				;	If r8 is Less Than 10 (not multiple) end program
 		BGT loop2				;	Loop if r8 is still above 10
 		
 valid	MOV r0, #1				;	Store 1 in r0 when valid
