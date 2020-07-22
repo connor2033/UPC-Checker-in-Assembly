@@ -1,0 +1,74 @@
+
+
+
+ARM Macro Assembler    Page 1 
+
+
+    1 00000000                 AREA             Pointers, CODE, READONLY
+    2 00000000                 ENTRY
+    3 00000000         
+    4 00000000 E28F1044        ADR              r1, UPC     ; Register R1 point
+                                                            s to beginning of U
+                                                            PC string
+    5 00000004 E3A00002        MOV              r0, #2      ; Initializing R0 t
+                                                            o 2 (invalid by def
+                                                            ault) 
+    6 00000008         
+    7 00000008 E4D12001 
+                       loop1   LDRB             r2, [r1], #1 ; Load odd byte of
+                                                             UPC in R2
+    8 0000000C E2422030        SUB              r2, r2, #0x30 ; Find the real n
+                                                            umber in R2
+    9 00000010 E4D13001        LDRB             r3, [r1], #1 ; Load even byte o
+                                                            f UPC in R3
+   10 00000014 E2433030        SUB              r3, r3, #0x30 ; Find the real n
+                                                            umber in R3
+   11 00000018 E0844002        ADD              r4, r4, r2  ; Add R2 to R4 (Add
+                                                            ing odd digits)
+   12 0000001C E0855003        ADD              r5, r5, r3  ; Add R3 to R5 (Add
+                                                            ing even digits)
+   13 00000020 E2866001        ADD              r6, #1      ; Increment loop co
+                                                            unter R6 by 1
+   14 00000024 E3560006        CMP              r6, #6      ; Check loop counte
+                                                            r (loop until 6)
+   15 00000028 1AFFFFF6        BNE              loop1
+   16 0000002C         
+   17 0000002C E0847084        ADD              r7, r4, r4, LSL #1 ;  Multiplyi
+                                                            ng odd sum by 3 in 
+                                                            R7
+   18 00000030 E0858007        ADD              r8, r5, r7  ; Combining odd and
+                                                             even sums in R8 (t
+                                                            otal sum)
+   19 00000034         
+   20 00000034 E258800A 
+                       loop2   SUBS             r8, r8, #10 ;  Subtracting 10 f
+                                                            rom total sum
+   21 00000038 E358000A        CMP              r8, #10     ; Check if number r
+                                                            8 is 10
+   22 0000003C 0A000001        BEQ              valid       ; If total sum is m
+                                                            ultiple of 10
+   23 00000040 BA000000        BLT              loop        ; If r8 is Less Tha
+                                                            n 10 (not multiple)
+                                                             end program
+   24 00000044 CAFFFFFA        BGT              loop2       ; Loop if r8 is sti
+                                                            ll above 10
+   25 00000048         
+   26 00000048 E3A00001 
+                       valid   MOV              r0, #1      ; Store 1 in r0 whe
+                                                            n valid
+   27 0000004C         
+   28 0000004C 30 31 33 
+              38 30 30 
+              31 35 30 
+              37 33 38 UPC     DCB              "013800150738" ; UPC string 
+   29 00000058         
+   30 00000058                 END
+
+
+
+ARM Macro Assembler    Page 2 
+
+
+Command Line: --debug --xref --bi --apcs=interwork --depend=.\question1.d -o.\q
+uestion1.o -IC:\Keil\ARM\RV31\INC -IC:\Keil\ARM\CMSIS\Include --predefine="__EV
+AL SETA 1" --list=.\question1.lst question1.s
